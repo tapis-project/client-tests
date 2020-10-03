@@ -1,0 +1,23 @@
+===========================================================================================
+Standalone test suite for client side testing against the service running locally or in k8s
+===========================================================================================
+Files
+ run_client_tests.sh,
+ docker_run_svc.sh,
+ delete_client_test_data.sh
+===========================================================================================
+The client tests for the service are run using the script run_client_tests.sh.
+Please see the script file for information on how to run the script and which
+environment variables must be set prior to running the script.
+Note that running against the k8s PROD environment is not currently supported
+because the script uses SQL to cleanup DB artifacts and that seems too risky
+for PROD at this point.
+
+When running against the local service the script docker_run_sys_svc.sh is used
+to start the service and the script delete_client_test_data.sh is used to
+remove test artifacts from the DB after the run.
+
+===========================================================================================
+File find_port.py
+===========================================================================================
+Used by jenkins jobs to find an available port when running the client tests locally.

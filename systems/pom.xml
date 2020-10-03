@@ -1,0 +1,64 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>edu.utexas.tacc.tapis</groupId>
+    <artifactId>client-tests</artifactId>
+    <version>0.0.1</version>
+  </parent>
+
+  <artifactId>systems-client</artifactId>
+
+  <name>Tapis Systems Client</name>
+  <description>Java client for Systems Service</description>
+
+  <properties>
+    <!-- Skip integration tests by default -->
+    <!-- To run tests TAPIS_FILES_SVC_PASSWORD must be set in the env -->
+    <!-- Use following command to run integration tests -->
+    <!--   TAPIS_FILES_SVC_PASSWORD=<files_service_password> mvn verify -DskipIntegrationTests=false  -->
+    <skipIntegrationTests>true</skipIntegrationTests>
+  </properties>
+
+  <dependencies>
+    <dependency>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>auth-client</artifactId>
+      <version>${tapis-client-java.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>tokens-client</artifactId>
+      <version>${tapis-client-java.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>systems-client</artifactId>
+      <version>${tapis-client-java.version}</version>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
+
+  <build>
+    <sourceDirectory>src/main/java</sourceDirectory>
+
+    <plugins>
+      <!-- failsafe plugin is for running integration tests -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-failsafe-plugin</artifactId>
+        <configuration>
+<!--          <skip>${skipIntegrationTests}</skip>-->
+          <skip>false</skip>
+          <environmentVariables>
+            <APP_ENV>test</APP_ENV>
+          </environmentVariables>
+        </configuration>
+      </plugin>
+    </plugins>
+
+    <finalName>systems</finalName>
+  </build>
+
+</project>

@@ -1,8 +1,15 @@
 # Compiled class file
 *.class
 
+# Generated files
+openapi.json
+openapi.yaml
+
 # Log file
 *.log
+
+# VIM swap file
+*.swp
 
 # BlueJ files
 *.ctxt
@@ -21,3 +28,43 @@
 
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
+
+# Binary targets
+target
+*~
+
+# test reports
+testreports
+test-output
+
+# Include IntelliJ runConfigurations
+#  but not other files under .idea
+.idea/*
+!.idea/runConfigurations/
+# Intellij metadata files
+*.ids
+*.iml
+*.eml
+*.imp
+*.ipr
+*.iws
+
+# Eclipse metadata files
+.project
+.settings
+.classpath
+.externalToolBuilders
+
+# Apple system files
+.DS_Store
+.AppleDouble
+.LSOverride
+Icon
+
+# Thumbnails
+._*
+
+# Files that might appear on external disk
+.Spotlight-V100
+.Trashes
+
