@@ -2,6 +2,7 @@
 # Start up systems service using a docker image
 # Environment value must be passed in as first argument: dev, staging, prod
 # NOTE: For now, for safety, never run against prod
+# Optionally accept docker image reference for starting service locally. Default is tapis/systems:<run_env>
 # Following services from a running tapis3 are required: tenants, tokens, security-kernel
 # Base URL for remote services is determined by environment value passed in.
 # Systems service is available at http://localhost:8080/v3/systems
@@ -15,17 +16,17 @@
 
 PrgName=$(basename "$0")
 
-USAGE1="Usage: $PrgName { dev, staging }"
+USAGE1="Usage: $PrgName { dev, staging } [ <image_name> ]"
 
 # Run docker image for Systems service
 TAPIS_RUN_ENV=$1
-TAG="tapis/systems:${TAPIS_RUN_ENV}"
+TST_IMG=$2
 
 ##########################################################
 # Check number of arguments.
 ##########################################################
-if [ $# -ne 1 ]; then
-  echo "ERROR: Please provide environment"
+if [ $# -lt 1 -o $# -gt 2 ]; then
+  echo "ERROR: Incorrect number of arguments"
   echo $USAGE1
   exit 1
 fi
@@ -66,10 +67,15 @@ export PRG_RELPATH=$(dirname "$0")
 cd "$PRG_RELPATH"/. || exit
 export PRG_PATH=$(pwd)
 
+# Default test image for running svc locally is tapis/systems:$TAPIS_RUN_ENV
+if [ -z "$TST_IMG" ]; then
+  TST_IMG=tapis/systems:${TAPIS_RUN_ENV}
+fi
+
 # Running with network=host exposes ports directly. Only works for linux
 docker run -e TAPIS_SERVICE_PASSWORD="${TAPIS_SERVICE_PASSWORD}" \
            -e TAPIS_SERVICE_PORT="${TAPIS_SERVICE_PORT}" \
            -e TAPIS_TENANT_SVC_BASEURL="${BASE_URL}" \
            -e TAPIS_DB_PASSWORD="${TAPIS_DB_PASSWORD}" \
            -e TAPIS_DB_JDBC_URL="${TAPIS_DB_JDBC_URL}" \
-           -d --rm --network="host" "${TAG}"
+           -d --rm --network="host" "${TST_IMG}"

@@ -1,12 +1,11 @@
 #!/bin/sh
-# Use mvn to run tests for the systems client
-#   against the systems service running either locally or in k8s
+# Use mvn to run tests for the systems client against the systems service running either locally or in k8s
 #   and other services (tenants, sk, auth, tokens) running in DEV, STAGING, or PROD
 # NOTE: For safety, for now do not allow running against PROD
 # If requested use docker to start up the systems service locally using an image
-#   - image used is based on TAPIS_RUN_ENV, for example tapis/systems:dev
+#   - by default image used is based on TAPIS_RUN_ENV, for example tapis/systems:dev
+#   - optionally accept docker image reference for starting service locally. Default is tapis/systems:<run_env>
 # Use mvn to run the systems-client integration tests.
-#
 # The Tapis environment we are running in must be set to one of: dev, staging, prod
 # It can be set using env var TAPIS_RUN_ENV or by passing in as first arg, but not both.
 #
@@ -22,12 +21,11 @@
 
 PrgName=$(basename "$0")
 
-USAGE1="Usage: $PrgName { local | k8s } { dev | staging }"
+USAGE1="Usage: $PrgName { local | k8s } { dev | staging } [ <image_name> ]"
 USAGE2="Usage: Run systems client tests against service running locally or in K8S."
-#USAGE2="Usage: Set tapis run env by passing in or set using TAPIS_RUN_ENV, but not both"
 
 # Check number of arguments
-if [ $# -ne 2 ]; then
+if [ $# -lt 2 -o $# -gt 3 ]; then
   echo "ERROR: Incorrect number of arguments"
   echo "$USAGE1"
   echo "$USAGE2"
@@ -35,6 +33,8 @@ if [ $# -ne 2 ]; then
 fi
 RUN_SVC=$1
 RUN_ENV=$2
+TST_IMG=$3
+
 if [ -z "$RUN_ENV" ] && [ -z "$TAPIS_RUN_ENV" ]; then
   echo "ERROR: Unable to determine Tapis run env"
   echo "$USAGE1"
@@ -128,10 +128,16 @@ export PRG_PATH=$(pwd)
 
 echo "****** Running client tests for Systmes service. Target service = $RUN_SVC, TAPIS_RUN_ENV = $RUN_ENV"
 
+# Default test image for running svc locally is tapis/systems:$TAPIS_RUN_ENV
+if [ -z "$TST_IMG" ]; then
+  TST_IMG=tapis/systems:${TAPIS_RUN_ENV}
+fi
+
 # if requested start up the systems service locally
 if [ "$RUN_SVC" = "local" ]; then
  echo "Staring systems service locally"
- DOCK_RUN_ID=$(./docker_run_svc.sh "${RUN_ENV}")
+ echo "Using docker image: $TST_IMG"
+ DOCK_RUN_ID=$(./docker_run_svc.sh ${RUN_ENV} ${TST_IMG})
  RET_CODE=$?
  if [ $RET_CODE -ne 0 ]; then
    echo "======================================================================"
