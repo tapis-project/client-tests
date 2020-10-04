@@ -103,6 +103,7 @@ public class SearchASTTest
     try {
       tmpSys = getClientUsr(serviceURL, ownerUser1JWT).getSystemByName(systems.get(1)[1]);
     } catch (TapisClientException e) {
+      System.out.println("Exception checking for system: " + systems.get(1)[1] + " Exception: " + e);
       assertEquals(e.getCode(), 404);
       tmpSys = null;
     }
