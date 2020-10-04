@@ -1,0 +1,40 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="UserTest" type="TestNG" nameIsGenerated="true">
+    <module name="systems" />
+    <useClassPathOnly />
+    <extension name="coverage">
+      <pattern>
+        <option name="PATTERN" value="edu.utexas.tacc.tapis.systems.client.*" />
+        <option name="ENABLED" value="true" />
+      </pattern>
+    </extension>
+    <option name="SUITE_NAME" value="" />
+    <option name="PACKAGE_NAME" value="edu.utexas.tacc.tapis.systems.client" />
+    <option name="MAIN_CLASS_NAME" value="edu.utexas.tacc.tapis.systems.client.UserTest" />
+    <option name="GROUP_NAME" value="" />
+    <option name="TEST_OBJECT" value="CLASS" />
+    <option name="PARAMETERS" value="" />
+    <option name="OUTPUT_DIRECTORY" value="" />
+    <option name="TEST_SEARCH_SCOPE">
+      <value defaultName="moduleWithDependencies" />
+    </option>
+    <option name="PROPERTIES_FILE" value="" />
+    <envs>
+      <env name="TAPIS_SERVICE_PASSWORD" value="lwVkonzPnVgURqS4zge7mA" />
+      <env name="TAPIS_TENANT_SVC_BASEURL" value="https://master.develop.tapis.io" />
+      <env name="TAPIS_DB_JDBC_URL" value="jdbc:postgresql://localhost:5432/tapissysdb" />
+      <env name="TAPIS_DB_USER" value="tapis" />
+      <env name="TAPIS_DB_PASSWORD" value="password" />
+      <env name="TAPIS_DB_JDBC_URL_LOCAL" value="jdbc:postgresql://localhost:5432/tapissysdb" />
+      <env name="TAPIS_DB_JDBC_URL_SCB_DEVTST" value="jdbc:postgresql://c002.rodeo.tacc.utexas.edu:32258/tapissysdb" />
+      <env name="TAPIS_DB_PASSWORD_SCB_DEVTST" value="d3f@ult" />
+      <env name="TAPIS_DB_PASSWORD_LOCAL" value="password" />
+      <env name="TAPIS_FILES_SERVICE_PASSWORD" value="ihS8GpMmcKSky1ZGzyxJ4A" />
+    </envs>
+    <properties />
+    <listeners />
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>
