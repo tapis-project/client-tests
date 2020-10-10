@@ -1,11 +1,12 @@
 #!/bin/sh
-# Start up systems service using a docker image
+# Start up a service locally using a docker image
 # Environment value must be passed in as first argument: dev, staging, prod
+# Service name must be passed in as second argument: systems, apps
 # NOTE: For now, for safety, never run against prod
-# Optionally accept docker image reference for starting service locally. Default is tapis/systems:<run_env>
+# Optionally accept docker image reference for starting service locally. Default is tapis/<service_name>:<run_env>
 # Following services from a running tapis3 are required: tenants, tokens, security-kernel
 # Base URL for remote services is determined by environment value passed in.
-# Systems service is available at http://localhost:8080/v3/systems
+# Typically service will be available at http://localhost:8080/v3/<service_name>
 # Following environment variables must be set:
 #   TAPIS_SERVICE_PASSWORD
 #   TAPIS_DB_PASSWORD
@@ -16,16 +17,17 @@
 
 PrgName=$(basename "$0")
 
-USAGE1="Usage: $PrgName { dev, staging } [ <image_name> ]"
+USAGE1="Usage: $PrgName { dev, staging } {systems, apps} [ <image_name> ]"
 
-# Run docker image for Systems service
+# Run docker image for a service
 TAPIS_RUN_ENV=$1
-TST_IMG=$2
+TST_SVC=$2
+TST_IMG=$3
 
 ##########################################################
 # Check number of arguments.
 ##########################################################
-if [ $# -lt 1 -o $# -gt 2 ]; then
+if [ $# -lt 2 -o $# -gt 3 ]; then
   echo "ERROR: Incorrect number of arguments"
   echo $USAGE1
   exit 1
@@ -33,7 +35,7 @@ fi
 
 # Make sure we have the service password, db password and db URL
 if [ -z "$TAPIS_SERVICE_PASSWORD" ]; then
-  echo "ERROR: Please set env variable TAPIS_SERVICE_PASSWORD to the systems service password"
+  echo "ERROR: Please set env variable TAPIS_SERVICE_PASSWORD to the service password"
   echo $USAGE1
   exit 1
 fi
@@ -61,15 +63,22 @@ else
   exit 1
 fi
 
+# Make sure service is supported
+if [ "$TST_SVC" != "systems" -a "$TST_SVC" != "apps" ]; then
+  echo "ERROR: Invalid service name: $TST_SVC"
+  echo $USAGE1
+  exit 1
+fi
+
 # Determine absolute path to location from which we are running.
 export RUN_DIR=$(pwd)
 export PRG_RELPATH=$(dirname "$0")
 cd "$PRG_RELPATH"/. || exit
 export PRG_PATH=$(pwd)
 
-# Default test image for running svc locally is tapis/systems:$TAPIS_RUN_ENV
+# Default test image for running svc locally is tapis/$TST_SVC:$TAPIS_RUN_ENV
 if [ -z "$TST_IMG" ]; then
-  TST_IMG=tapis/systems:${TAPIS_RUN_ENV}
+  TST_IMG=tapis/${TST_SVC}:${TAPIS_RUN_ENV}
 fi
 
 # Running with network=host exposes ports directly. Only works for linux
