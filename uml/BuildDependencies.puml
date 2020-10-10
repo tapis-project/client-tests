@@ -1,0 +1,25 @@
+@startuml
+!include theme/base-skin.iuml
+
+' Dependency diagram for Tapis Java Code
+'   using PlantUML component diagram
+
+[tapis-bom]<-[All Components]
+[tapis-bom]<--[tapis-client-java]
+[tapis-client-java]<--[tapis-shared-java]
+[tapis-shared-java]<--[tapis-java\n(sk, meta, jobs)]
+[tapis-client-java]<--[tapis-java\n(sk, meta, jobs)]
+'[tapis-shared-java]<--[tapis-sk]
+'[tapis-client-java]<--[tapis-sk]
+[tapis-shared-java]<--[tapis-systems]
+[tapis-client-java]<--[tapis-systems]
+[tapis-shared-java]<--[tapis-files]
+[tapis-client-java]<--[tapis-files]
+'[tapis-shared-java]<--[tapis-meta]
+'[tapis-client-java]<--[tapis-meta]
+[tapis-shared-java]<--[tapis-apps]
+[tapis-client-java]<--[tapis-apps]
+'[tapis-shared-java]<--[tapis-jobs]
+'[tapis-client-java]<--[tapis-jobs]
+
+@enduml
